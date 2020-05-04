@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 var Item = mongoose.model('Item', {
     //Strings will get typecasted
