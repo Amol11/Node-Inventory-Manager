@@ -1,4 +1,5 @@
 const express = require('express');
+const _ = require('lodash');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
@@ -46,6 +47,53 @@ app.get('/items/:id', (req, res) => {
     }).catch(err => {
         res.status(400).send(err);
     });
+});
+
+
+app.delete('/items/:id', (req, res) => {
+    var id = req.params.id;
+
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send('Invalid ID!');
+    }
+
+    Item.findByIdAndDelete(id).then((item) => {
+        if(!item){
+            return res.status(404).send('No item found.');
+        }
+
+        res.send({item});
+    }).catch(err => {
+        res.status(400).send();
+    });
+});
+
+app.patch('/items/inventory/:id', (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['itemName', 'itemType', 'itemInventoryStatus', 'itemOrderStatus']);
+
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send('Invalid ID!');
+    }
+
+    if(_.isBoolean(body.itemInventoryStatus) && body.itemInventoryStatus && _.isBoolean(body.itemOrderStatus) && body.itemOrderStatus){
+        body.itemOrderCreatedAt = new Date().getTime();
+    }
+    else{
+        body.itemOrderStatus = false;
+        body.itemOrderCreatedAt = null;
+    }
+
+    Item.findByIdAndUpdate(id, {$set: body}, {new: true})
+    .then((item) => {
+        if(!item){
+            return res.status(404).send('Item was not found');
+        }
+        res.send({item});
+    }).catch(err => {
+        res.status(400).send();
+    });
+
 });
 
 app.listen(3000, () => {
