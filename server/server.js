@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const {ObjectID} = require('mongodb');
 
 var {mongoose} = require('./db/mongoose.js');
 var {Item} = require('./models/item.js');
@@ -17,6 +17,32 @@ app.post('/items', (req, res) => {
     });
     item.save().then((item) => {
         res.send(item);
+    }).catch(err => {
+        res.status(400).send(err);
+    });
+});
+
+app.get('/items', (req, res) => {
+    Item.find().then((items) => {
+        res.send({items});
+    }).catch(err => {
+        res.status(400).send(err);
+    });
+});
+
+app.get('/items/:id', (req, res) => {
+    var id = req.params.id;
+
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send('ID is invalid');
+    }
+
+    Item.findById(id).then((item) => {
+        if(!item){
+            return res.status(404).send('no item found');
+        }
+
+        res.send({item});
     }).catch(err => {
         res.status(400).send(err);
     });
