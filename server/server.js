@@ -68,7 +68,7 @@ app.delete('/items/:id', (req, res) => {
     });
 });
 
-app.patch('/items/inventory/:id', (req, res) => {
+app.patch('/items/:id', (req, res) => {
     var id = req.params.id;
     var body = _.pick(req.body, ['itemName', 'itemType', 'itemInventoryStatus', 'itemOrderStatus']);
 
@@ -94,6 +94,22 @@ app.patch('/items/inventory/:id', (req, res) => {
         res.status(400).send();
     });
 
+});
+
+
+//user sign-up
+app.post('/users', (req, res) => {
+    var body = _.pick(req.body, ['email', 'password']);
+    var user = new User(body);
+
+    user.save().then(() => {
+        return user.generateAuthToken();
+    }).then((token) => {
+        // console.log(token);
+        res.header('x-auth', token).send(user);
+    }).catch(err => {
+        res.status(400).send(err);
+    });
 });
 
 app.listen(3000, () => {
