@@ -31,6 +31,10 @@ var Item = mongoose.model('Item', {
         minlength: 2,
         trim: true,
         default: 'At the warehouse',
+    }, 
+    _creator: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
     }
 });
 

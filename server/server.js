@@ -13,10 +13,11 @@ const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
-app.post('/items', (req, res) => {
+app.post('/items', authenticate, (req, res) => {
     var item = new Item({
         itemName: req.body.itemName,
-        itemType: req.body.itemType
+        itemType: req.body.itemType,
+        _creator: req.user._id,
     });
     item.save().then((item) => {
         res.send(item);
@@ -25,8 +26,10 @@ app.post('/items', (req, res) => {
     });
 });
 
-app.get('/items', (req, res) => {
-    Item.find().then((items) => {
+app.get('/items', authenticate, (req, res) => {
+    Item.find({
+        _creator: req.user._id,
+    }).then((items) => {
         res.send({items});
     }).catch(err => {
         res.status(400).send(err);
@@ -114,6 +117,7 @@ app.post('/users', (req, res) => {
     });
 });
 
+//user-info
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });
@@ -127,6 +131,17 @@ app.post('/users/login', (req, res) => {
         })
     }).catch((err) => {
         res.status(400).send(err);
+    });
+});
+
+
+//logout
+app.delete('/users/me/token', authenticate, (req, res) => {
+    // console.log(req.token);
+    req.user.removeToken(req.token).then(() => {
+        res.status(200).send();
+    }, () => {
+        res.status(400).send();
     });
 });
 
