@@ -36,14 +36,17 @@ app.get('/items', authenticate, (req, res) => {
     });
 });
 
-app.get('/items/:id', (req, res) => {
+app.get('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
 
     if(!ObjectID.isValid(id)){
         return res.status(404).send('ID is invalid');
     }
 
-    Item.findById(id).then((item) => {
+    Item.findOne({
+        _id: id,
+        _creator: req.user._id,
+    }).then((item) => {
         if(!item){
             return res.status(404).send('no item found');
         }
@@ -55,14 +58,17 @@ app.get('/items/:id', (req, res) => {
 });
 
 
-app.delete('/items/:id', (req, res) => {
+app.delete('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
 
     if(!ObjectID.isValid(id)){
         return res.status(404).send('Invalid ID!');
     }
 
-    Item.findByIdAndDelete(id).then((item) => {
+    Item.findOneAndRemove({
+        _id: id,
+        _creator: req.user._id,
+    }).then((item) => {
         if(!item){
             return res.status(404).send('No item found.');
         }
@@ -73,7 +79,7 @@ app.delete('/items/:id', (req, res) => {
     });
 });
 
-app.patch('/items/:id', (req, res) => {
+app.patch('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
     var body = _.pick(req.body, ['itemName', 'itemType', 'itemInventoryStatus', 'itemOrderStatus']);
 
@@ -89,7 +95,7 @@ app.patch('/items/:id', (req, res) => {
         body.itemOrderCreatedAt = null;
     }
 
-    Item.findByIdAndUpdate(id, {$set: body}, {new: true})
+    Item.findOneAndUpdate({_id: id, _creator: req.user._id}, {$set: body}, {new: true})
     .then((item) => {
         if(!item){
             return res.status(404).send('Item was not found');
