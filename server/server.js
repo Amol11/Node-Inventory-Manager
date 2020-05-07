@@ -24,7 +24,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-    res.render('dashboard.hbs');
+    res.render('dashboard.hbs', {
+        user: toString(req.body),
+    });
 });
 
 app.post('/items', authenticate, (req, res) => {

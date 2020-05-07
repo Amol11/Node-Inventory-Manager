@@ -2,21 +2,24 @@
 <html>
     <head>
         <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <title>Sign-Up</title>
     </head>
     <body>
         <center>
-            <h1>Your Inventory</h1>
+            <script>
+            var userEmail=localStorage.getItem("userInfo");
+            var userId=localStorage.getItem("userId");
+            console.log(userEmail);
+            console.log(userId);
+        </script>
+            <h1>Welcome {{userEmail}}</h1>
             <input type="submit" value="Add item" onclick="addItem()"/>
             <input type="submit" value="Remove item"/>
             <input type="submit" value="Edit item"/>
             <input type="submit" value="Place order"/>
             <input type="submit" value="Track order"/>
+            <input type="submit" value="Logout"/>
         </center>
-        <script>
-            function addItem(){
-                
-            }
-        </script>
     </body>
 </html>

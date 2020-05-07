@@ -9,7 +9,7 @@
         <center>
             <h1>Welcome to the Inventory Manager</h1>
             <p>Sign Up here</p>
-            <form>
+            <form method="post">
                 <input name="email" id="email" type="text" required placeholder="E-Mail" autofocus autocomplete="off"/><br/><br/>
                 <input name="password" id="password" type="text" required placeholder="password" autofocus autocomplete="off"/><br/><br/>
                 <button type="button" onclick="myFunction()">Submit</button>
@@ -31,16 +31,17 @@
                 data: JSON.stringify(user),
                 contentType: 'application/json',
                 url: '/users',
-                success: function(response) {
-                console.log(response);
-                if(response.user.email === user.email){
-                location.href = 'dashboard.hbs'
-                localStorage.setItem('token', response.user.token);
-                }
-                else{
-                alert("Invalid credentials.");
-                }
-    }
+                statusCode: {
+                    400: function() {
+                        alert("Invalid email/password!");
+                    },
+                    200: function(res){
+                        console.log(res);
+                        localStorage.setItem("userEmail", res.email);
+                        localStorage.setItem("userId", res._id);
+                        location.href = "/dashboard";
+                    }
+                },
     });
 }
             </script>
