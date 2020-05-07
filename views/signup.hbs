@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <title>Sign-Up</title>
+    </head>
+    <body>
+        <center>
+            <h1>Welcome to the Inventory Manager</h1>
+            <p>Sign Up here</p>
+            <form>
+                <input name="email" id="email" type="text" required placeholder="E-Mail" autofocus autocomplete="off"/><br/><br/>
+                <input name="password" id="password" type="text" required placeholder="password" autofocus autocomplete="off"/><br/><br/>
+                <button type="button" onclick="myFunction()">Submit</button>
+            </form>
+            <script>
+            var user;
+
+            function myFunction() {
+            var email = document.getElementById("email").value;
+            var password = document.getElementById("password").value;
+
+            user = {
+                    email,
+                    password,
+                }
+
+            $.ajax({
+                type: 'POST',
+                data: JSON.stringify(user),
+                contentType: 'application/json',
+                url: '/users',
+                success: function(response) {
+                console.log(response);
+                if(response.user.email === user.email){
+                location.href = 'dashboard.hbs'
+                localStorage.setItem('token', response.user.token);
+                }
+                else{
+                alert("Invalid credentials.");
+                }
+    }
+    });
+}
+            </script>
+        </center>
+    </body>
+</html>

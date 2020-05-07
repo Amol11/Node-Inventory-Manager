@@ -2,24 +2,29 @@ const express = require('express');
 const _ = require('lodash');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
+const hbs = require('hbs');
 
 var {mongoose} = require('./db/mongoose.js');
 var {Item} = require('./models/item.js');
 var {User} = require('./models/user.js');
 var {authenticate} = require('./middleware/authenticate.js');
 
-
 var app = express();
+app.set('view engine', 'hbs');
 const port = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/website/signup.html');
+    res.render('signup.hbs');
+});
+
+app.get('/dashboard', (req, res) => {
+    res.render('dashboard.hbs');
 });
 
 app.post('/items', authenticate, (req, res) => {
@@ -127,8 +132,9 @@ app.post('/users', (req, res) => {
     }).then((token) => {
         // console.log(token);
         res.header('x-auth', token).send(user);
+        // res.render('dashboard.hbs');
     }).catch(err => {
-        res.status(400).send(error);
+        res.status(400).send(err);
     });
 });
 
