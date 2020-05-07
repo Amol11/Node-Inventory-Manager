@@ -8,10 +8,19 @@ var {Item} = require('./models/item.js');
 var {User} = require('./models/user.js');
 var {authenticate} = require('./middleware/authenticate.js');
 
+
 var app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(bodyParser.json());
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/website/signup.html');
+});
 
 app.post('/items', authenticate, (req, res) => {
     var item = new Item({
@@ -119,7 +128,7 @@ app.post('/users', (req, res) => {
         // console.log(token);
         res.header('x-auth', token).send(user);
     }).catch(err => {
-        res.status(400).send(err);
+        res.status(400).send(error);
     });
 });
 
