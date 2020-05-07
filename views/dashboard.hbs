@@ -7,13 +7,8 @@
     </head>
     <body>
         <center>
-            <script>
-            var userEmail=localStorage.getItem("userInfo");
-            var userId=localStorage.getItem("userId");
-            console.log(userEmail);
-            console.log(userId);
-        </script>
-            <h1>Welcome {{userEmail}}</h1>
+            <h1 id="welcome"></h1>
+            <h3>Your Inventory</h3>
             <input type="submit" value="Add item" onclick="addItem()"/>
             <input type="submit" value="Remove item"/>
             <input type="submit" value="Edit item"/>
@@ -21,5 +16,14 @@
             <input type="submit" value="Track order"/>
             <input type="submit" value="Logout"/>
         </center>
+        <script>
+            var userEmail=localStorage.getItem("userEmail");
+            var userId=localStorage.getItem("userId");
+            var greet = jQuery('<h1></h1>');
+            greet.text(`Welcome ${userEmail}`);
+            jQuery('#welcome').append(greet);
+            console.log(userEmail);
+            console.log(userId);
+        </script>
     </body>
 </html>
