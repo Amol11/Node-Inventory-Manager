@@ -5,45 +5,83 @@
         <meta charset="utf-8">
         <title>Sign-Up</title>
     </head>
-    <body>
+    <body onload="myFunction()">
         <center>
             <h1>Your Inventory</h1>
-            
+            <a href="/dashboard">Go back to dashboard</a><br/><br/>
+
+            <table class="table table-striped" border="1">
+                <tr class="bg-info">
+                <th>Item Name</th>
+                <th>Item Type</th>
+                <th>Order Status</th>
+                </tr>
+                <tbody id="myTable">
+
+                </tbody>
+            </table>
+
             <script>
+                function buildTable(data){
+                    var table = document.getElementById('myTable');
+
+                    for(var i=0;i<data.length;i++){
+                        var row = `<tr>
+                            <td>${data[i].itemName}</td>
+                            <td>${data[i].itemType}</td>
+                            <td>${data[i].itemOrderStatus}</td>
+                            <input type="submit" value="Edit Item" onclick="itemEdit(${data[i]._id})"/>
+                            <input type="submit" value="Remove Item" onclick="itemRemove(${data[i]._id})"/>
+                            <input type="submit" value="Order Item"onclick="itemOrder()"/>
+                        </tr>`
+                        table.innerHTML += row;
+                    }
+                }
+
+
+            var items;
             var user;
+            var _id=localStorage.getItem("userId");
+            var authHeader=localStorage.getItem("header");
+            user = {
+                _id,
+            }
+            console.log(_id);
+            console.log(authHeader);
+            
+            function itemRemove(id){
+                console.log(id);
+               
+            }
+
+            function itemEdit(){
+                location.href = "/editItem";
+            }
 
             function myFunction() {
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
-
-            user = {
-                    email,
-                    password,
-                }
 
             $.ajax({
                 type: 'GET',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
-                url: '/users',
+                url: '/items',
+                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
                 statusCode: {
-                    400: function() {
-                        alert("Invalid email/password!");
+                    401: function(data){
+                        console.log(data);
+                    },
+                    400: function(data) {
+                        console.log(data);
                     },
                     200: function(res){
                         console.log(res);
-                        localStorage.setItem("userEmail", res.email);
-                        localStorage.setItem("userId", res._id);
-                        location.href = "/dashboard";
+                        
+                        buildTable(res.items);
                     }
-                },
-                success: function(data, textStatus, request){
-                    var header = request.getResponseHeader('x-auth');
-                    localStorage.setItem("header", header);
-                    console.log(header);
                 },
     });
 }
+
             </script>
         </center>
     </body>

@@ -23,6 +23,10 @@ app.get('/', (req, res) => {
     res.render('signup.hbs');
 });
 
+app.get('/login', (req, res) => {
+    res.render('login.hbs');
+});
+
 app.get('/dashboard', (req, res) => {
     res.render('dashboard.hbs');
 });
@@ -33,6 +37,10 @@ app.get('/addItem', (req, res) => {
 
 app.get('/viewItems', (req, res) => {
     res.render('viewinventory.hbs');
+});
+
+app.get('/editItem', (req, res) => {
+    res.render('edititem.hbs');
 });
 
 app.post('/items', authenticate, (req, res) => {

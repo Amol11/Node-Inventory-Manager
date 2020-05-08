@@ -3,20 +3,19 @@
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <meta charset="utf-8">
-        <title>Sign-Up</title>
+        <title>Login</title>
     </head>
     <body>
         <center>
             <h1>Welcome to the Inventory Manager</h1>
-            <p>Sign Up here</p>
+            <p>Login here</p>
             <form method="post">
                 <input name="email" id="email" type="text" required placeholder="E-Mail" autofocus autocomplete="off"/><br/><br/>
                 <input name="password" id="password" type="text" required placeholder="password" autofocus autocomplete="off"/><br/><br/>
                 <button type="button" onclick="myFunction()">Submit</button>
-            </form><br/>
-            <h3>Already have an account?</h3>
-            <a href="/login">Login here</a>
-
+            </form>
+            <h3>Don't have an account?</h3>
+            <a href="/">Sign-up here</a>
             <script>
             var user;
 
@@ -33,10 +32,10 @@
                 type: 'POST',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
-                url: '/users',
+                url: '/users/login',
                 statusCode: {
                     400: function() {
-                        alert("Invalid email/password!");
+                        alert("Incorrect email/password!");
                     },
                     200: function(res){
                         console.log(res);

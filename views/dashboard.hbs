@@ -12,21 +12,54 @@
             <input type="submit" value="Add item" onclick="addItem()"/>
             <input type="submit" value="View inventory items" onclick="viewItems()"/>
             <input type="submit" value="My orders"/>
-            <input type="submit" value="Logout"/>
+            <input type="submit" value="Logout" onclick="logOut()"/>
         </center>
         <script>
             var userEmail=localStorage.getItem("userEmail");
             var userId=localStorage.getItem("userId");
+
             var greet = jQuery('<h1></h1>');
             greet.text(`Welcome ${userEmail}`);
             jQuery('#welcome').append(greet);
+
             console.log(userEmail);
             console.log(userId);
+
             var addItem = function(){
                 location.href = "/addItem";
             }
             var viewItems = function(){
                 location.href = "/viewItems";
+            }
+
+            var authHeader=localStorage.getItem("header");
+
+            function logOut(){
+
+
+                $.ajax({
+                type: 'DELETE',
+                contentType: 'application/json',
+                url: '/users/me/token',
+                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                statusCode: {
+                    401: function(data){
+                        console.log(data);
+                        alert("Unauthorized.");
+                    },
+                    400: function(data) {
+                        console.log(data);
+                        alert("Unable to logout.");
+                    },
+                    200: function(res){
+                        localStorage.removeItem("userId");
+                        localStorage.removeItem("header");
+
+                        alert("Logout successful");
+                        location.href = "/";
+                    }
+                },
+    });
             }
         </script>
     </body>
