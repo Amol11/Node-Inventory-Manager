@@ -8,12 +8,10 @@
     <body>
         <center>
             <h1 id="welcome"></h1>
-            <h3>Your Inventory</h3>
+            <h2>Your Inventory</h2>
             <input type="submit" value="Add item" onclick="addItem()"/>
-            <input type="submit" value="Remove item"/>
-            <input type="submit" value="Edit item"/>
-            <input type="submit" value="Place order"/>
-            <input type="submit" value="Track order"/>
+            <input type="submit" value="View inventory items" onclick="viewItems()"/>
+            <input type="submit" value="My orders"/>
             <input type="submit" value="Logout"/>
         </center>
         <script>
@@ -24,6 +22,12 @@
             jQuery('#welcome').append(greet);
             console.log(userEmail);
             console.log(userId);
+            var addItem = function(){
+                location.href = "/addItem";
+            }
+            var viewItems = function(){
+                location.href = "/viewItems";
+            }
         </script>
     </body>
 </html>

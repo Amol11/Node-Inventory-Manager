@@ -24,9 +24,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/dashboard', (req, res) => {
-    res.render('dashboard.hbs', {
-        user: toString(req.body),
-    });
+    res.render('dashboard.hbs');
+});
+
+app.get('/addItem', (req, res) => {
+    res.render('additem.hbs');
+});
+
+app.get('/viewItems', (req, res) => {
+    res.render('viewinventory.hbs');
 });
 
 app.post('/items', authenticate, (req, res) => {
