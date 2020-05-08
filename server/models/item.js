@@ -14,10 +14,6 @@ var Item = mongoose.model('Item', {
         minlength: 2,
         trim: true,
     },
-    itemInventoryStatus: {
-        type: Boolean,
-        default: true,
-    },
     itemOrderStatus:{
         type: Boolean,
         default: false,

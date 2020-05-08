@@ -34,10 +34,7 @@ var UserSchema = new mongoose.Schema({
             required: true,
         }
     }],
-    inventory: {
-        type: Array,
-        default: null,
-    },
+    
     orders: {
         type: Array,
         default: null,

@@ -111,13 +111,13 @@ app.delete('/items/:id', authenticate, (req, res) => {
 
 app.patch('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
-    var body = _.pick(req.body, ['itemName', 'itemType', 'itemInventoryStatus', 'itemOrderStatus']);
+    var body = _.pick(req.body, ['itemName', 'itemType', 'itemOrderStatus']);
 
     if(!ObjectID.isValid(id)){
         return res.status(404).send('Invalid ID!');
     }
 
-    if(_.isBoolean(body.itemInventoryStatus) && body.itemInventoryStatus && _.isBoolean(body.itemOrderStatus) && body.itemOrderStatus){
+    if(_.isBoolean(_.isBoolean(body.itemOrderStatus) && body.itemOrderStatus)){
         body.itemOrderCreatedAt = new Date().getTime();
     }
     else{
