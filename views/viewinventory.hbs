@@ -59,7 +59,7 @@
                 console.log(creator);
 
                 if(itemOrderStatus === 'true'){
-                    alert("Ordered items cannot be removed.");
+                    alert("Ordered items cannot be removed. Cancel order to remove the Item.");
                 }
                 else{
                     $.ajax({
@@ -92,7 +92,7 @@
 
             function itemEdit(id, creator, itemName, itemType, itemOrderStatus){
                 if(itemOrderStatus === 'true'){
-                    alert("Ordered items cannot be edited.");
+                    alert("Ordered items cannot be edited. Cancel order to edit  the item.");
                 }
                 else{
                     console.log(itemName);
