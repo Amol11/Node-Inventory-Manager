@@ -41,6 +41,7 @@
                             <td>${data[i].itemType}</td>
                             <td>${data[i].itemDeliveryStatus}</td>
                             <td>${data[i].itemOrderCreatedAt}</td>
+                            <input type="submit" value="Cancel Order" onclick="cancelOrder('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
                             </tr>`
                             table.innerHTML += row;
                         }
@@ -54,6 +55,42 @@
             var authHeader=localStorage.getItem("header");
             
             console.log(authHeader);
+
+            function cancelOrder(id, creator, itemOrderStatus){
+                itemOrderStatus = false;
+                var item;
+                    item = {
+                        id,
+                        itemOrderStatus,
+                        _id: creator,
+                    }
+
+                    $.ajax({
+                type: 'PATCH',
+                data: JSON.stringify(item),
+                contentType: 'application/json',
+                url: `/items/order/${id}`,
+                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                statusCode: {
+                    401: function(data){
+                        alert("Unauthorized!");
+                    },
+                    404: function(data){
+                        console.log(data);
+                        alert("Order not found.");
+                    },
+                    400: function(data) {
+                        alert("Something went wrong.");
+                        console.log(data);
+                    },
+                    200: function(res){
+                        console.log(res);
+                        location.reload();
+                        alert("Item order has been cancelled successfully.");
+                    }
+                },
+                });
+            }
 
             function myFunction() {
 

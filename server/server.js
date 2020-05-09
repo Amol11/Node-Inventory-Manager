@@ -141,7 +141,7 @@ app.patch('/items/order/:id', authenticate, (req, res) => {
         return res.status(404).send('Invalid ID!');
     }
 
-    if(_.isBoolean(_.isBoolean(body.itemOrderStatus) && body.itemOrderStatus)){
+    if(_.isBoolean(body.itemOrderStatus) && body.itemOrderStatus){
         body.itemOrderCreatedAt = new Date().getTime();
     }
     else{

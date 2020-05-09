@@ -65,9 +65,11 @@
                         localStorage.removeItem("userId");
                         localStorage.removeItem("userEmail");
                         localStorage.removeItem("header");
+                        localStorage.removeItem("itemName");
+                        localStorage.removeItem("itemType");
 
                         alert("Logout successful");
-                        location.href = "/";
+                        location.href = "/login";
                     }
                 },
     });
