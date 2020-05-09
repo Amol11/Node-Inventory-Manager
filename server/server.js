@@ -143,9 +143,11 @@ app.patch('/items/order/:id', authenticate, (req, res) => {
 
     if(_.isBoolean(body.itemOrderStatus) && body.itemOrderStatus){
         body.itemOrderCreatedAt = new Date().getTime();
+        body.itemDeliveryStatus = 'Dispatched';
     }
     else{
         body.itemOrderStatus = false;
+        body.itemDeliveryStatus = 'At the warehouse';
         body.itemOrderCreatedAt = null;
     }
 
