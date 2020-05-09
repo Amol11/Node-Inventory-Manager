@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <title>Edit Item</title>
+    </head>
+    <body onload="redirectUser()">
+        <center>
+            <h1>Add Item</h1>
+            <p>This item will be added to your inventory.</p>
+            <a href="/viewItems">Go back to View Items</a><br/><br/>
+                 <p id="oldName"></p>
+                 <p id="oldType"></p>
+            <form method="post">
+                <input name="itemName" id="itemName" type="text" required placeholder="Item new Name" autofocus autocomplete="off"/><br/><br/>
+                <input name="itemType" id="itemType" type="text" required placeholder="Item new Type" autofocus autocomplete="off"/><br/><br/>
+                <button type="button" onclick="myFunction()">Submit</button>
+            </form>
+            <script>
+            var itemName = localStorage.getItem("itemName");
+            var itemType = localStorage.getItem("itemType");
+            console.log(itemName);
+            console.log(itemType);
+
+            var oldName = jQuery('<p></p>');
+            oldName.text(`Item Name: ${itemName}`);
+            jQuery('#oldName').append(oldName);
+
+            var oldType = jQuery('<p></p>');
+            oldType.text(`Item Type: ${itemType}`);
+            jQuery('#oldType').append(oldType);
+
+            var authHeader=localStorage.getItem("header");
+            var creator = localStorage.getItem("creatorId");
+            var id = localStorage.getItem("itemId");
+
+            console.log(creator);
+            console.log(id);
+            console.log(authHeader);
+
+            function redirectUser(){
+            var checkEmail=localStorage.getItem("userEmail");
+            if(checkEmail === null){
+                location.href = "/login";
+            }
+            }
+            
+            function myFunction() {
+            var itemName = document.getElementById("itemName").value;
+            var itemType= document.getElementById("itemType").value;
+            
+            var item;
+              item = {
+                    itemName,
+                    itemType,
+                    id: id,
+                    _id: creator,
+                }
+                
+
+            $.ajax({
+                type: 'PATCH',
+                data: JSON.stringify(item),
+                contentType: 'application/json',
+                url: `/items/${id}`,
+                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                statusCode: {
+                    401: function(data){
+                        alert("Unauthorized!");
+                    },
+                    404: function(data){
+                        console.log(data);
+                        alert("Item not found.");
+                    },
+                    400: function(data) {
+                        alert("Something went wrong.");
+                        console.log(data);
+                    },
+                    200: function(res){
+                        console.log(res);
+                        location.href = "/viewItems";
+                        alert("Item info changed successfully.");
+                    }
+                },
+                });
+}
+            </script>
+        </center>
+    </body>
+</html>

@@ -26,11 +26,11 @@
             console.log(authHeader);
 
                 function redirectUser(){
-            var checkEmail=localStorage.getItem("userEmail");
-            if(checkEmail === null){
-                location.href = "/login";
-            }
-            }
+                    var checkEmail=localStorage.getItem("userEmail");
+                    if(checkEmail === null){
+                    location.href = "/login";
+                    }
+                }
 
                 function buildTable(data){
                     var table = document.getElementById('myTable');
@@ -40,15 +40,16 @@
                             <td>${data[i].itemName}</td>
                             <td>${data[i].itemType}</td>
                             <td>${data[i].itemOrderStatus}</td>
-                            <input type="submit" value="Edit Item" onclick="itemEdit('${data[i]._id}', '${data[i]._creator}')"/>
-                            <input type="button" value="Remove Item" onclick="itemRemove('${data[i]._id}', '${data[i]._creator}')"/>
-                            <input type="submit" value="Order Item"onclick="itemOrder()"/>
+                            <input type="submit" value="Edit Item" onclick="itemEdit('${data[i]._id}', '${data[i]._creator}', '${data[i].itemName}', '${data[i].itemType}', '${data[i].itemOrderStatus}')"/>
+                            <input type="button" value="Remove Item" onclick="itemRemove('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
+                            <input type="submit" value="Order Item" onclick="itemOrder('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
                         </tr>`
                         table.innerHTML += row;
                     }
                 }
             
-            function itemRemove(id, creator){
+            function itemRemove(id, creator, itemOrderStatus){
+                console.log("remove item:",itemOrderStatus);
                 var user;
                 user = {
                 id,
@@ -57,8 +58,11 @@
                 console.log(id);
                 console.log(creator);
 
-
-                $.ajax({
+                if(itemOrderStatus === 'true'){
+                    alert("Ordered items cannot be removed.");
+                }
+                else{
+                    $.ajax({
                 type: 'DELETE',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
@@ -83,10 +87,63 @@
                     }
                 },
                 });
+                }
             }
 
-            function itemEdit(){
-                location.href = "/editItem";
+            function itemEdit(id, creator, itemName, itemType, itemOrderStatus){
+                if(itemOrderStatus === 'true'){
+                    alert("Ordered items cannot be edited.");
+                }
+                else{
+                    console.log(itemName);
+                    console.log(itemType);
+                    localStorage.setItem("itemId", id);
+                    localStorage.setItem("creatorId", creator);
+                    localStorage.setItem("itemName", itemName);
+                    localStorage.setItem("itemType", itemType);
+                    location.href = "/editItem";
+                }
+            }
+
+            function itemOrder(id, creator, itemOrderStatus){
+                if(itemOrderStatus === 'true'){
+                    alert("Item has already been ordered.");
+                }
+                else{
+                    itemOrderStatus = 'true';
+                    var item;
+                    item = {
+                        id,
+                        itemOrderStatus,
+                        _id: creator,
+                    }
+
+                    $.ajax({
+                type: 'PATCH',
+                data: JSON.stringify(item),
+                contentType: 'application/json',
+                url: `/items/order/${id}`,
+                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                statusCode: {
+                    401: function(data){
+                        alert("Unauthorized!");
+                    },
+                    404: function(data){
+                        console.log(data);
+                        alert("Item not found.");
+                    },
+                    400: function(data) {
+                        alert("Something went wrong.");
+                        console.log(data);
+                    },
+                    200: function(res){
+                        console.log(res);
+                        location.reload();
+                        alert("Item order has been placed successfully.");
+                    }
+                },
+                });
+                }
             }
 
             function myFunction() {
@@ -116,8 +173,10 @@
                         buildTable(res.items);
                     }
                 },
-    });
-}
+            });
+            localStorage.removeItem("itemId");
+            localStorage.removeItem("creatorId");
+        }
 
             </script>
         </center>

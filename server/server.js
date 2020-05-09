@@ -115,7 +115,27 @@ app.delete('/items/:id', authenticate, (req, res) => {
 
 app.patch('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
-    var body = _.pick(req.body, ['itemName', 'itemType', 'itemOrderStatus']);
+    var body = _.pick(req.body, ['itemName', 'itemType']);
+
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send('Invalid ID!');
+    }
+
+    Item.findOneAndUpdate({_id: id, _creator: req.user._id}, {$set: body}, {new: true})
+    .then((item) => {
+        if(!item){
+            return res.status(404).send('Item was not found');
+        }
+        res.send({item});
+    }).catch(err => {
+        res.status(400).send();
+    });
+
+});
+
+app.patch('/items/order/:id', authenticate, (req, res) => {
+    var id = req.params.id;
+    var body = _.pick(req.body, ['itemOrderStatus']);
 
     if(!ObjectID.isValid(id)){
         return res.status(404).send('Invalid ID!');
