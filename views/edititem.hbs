@@ -23,10 +23,12 @@
             console.log(itemName);
             console.log(itemType);
 
+            //dispaly old itemName
             var oldName = jQuery('<p></p>');
             oldName.text(`Item Name: ${itemName}`);
             jQuery('#oldName').append(oldName);
 
+            //display old itemType
             var oldType = jQuery('<p></p>');
             oldType.text(`Item Type: ${itemType}`);
             jQuery('#oldType').append(oldType);
@@ -40,18 +42,18 @@
             console.log(authHeader);
 
             function redirectUser(){
-            var checkEmail=localStorage.getItem("userEmail");
-            if(checkEmail === null){
-                location.href = "/login";
-            }
+                var checkEmail=localStorage.getItem("userEmail");
+                if(checkEmail === null){
+                    location.href = "/login";
+                }
             }
             
             function myFunction() {
-            var itemName = document.getElementById("itemName").value;
-            var itemType= document.getElementById("itemType").value;
+                var itemName = document.getElementById("itemName").value;
+                var itemType= document.getElementById("itemType").value;
             
-            var item;
-              item = {
+                var item;
+                item = {
                     itemName,
                     itemType,
                     id: id,
@@ -59,7 +61,7 @@
                 }
                 
 
-            $.ajax({
+                $.ajax({
                 type: 'PATCH',
                 data: JSON.stringify(item),
                 contentType: 'application/json',
@@ -84,7 +86,7 @@
                     }
                 },
                 });
-}
+            }
             </script>
         </center>
     </body>

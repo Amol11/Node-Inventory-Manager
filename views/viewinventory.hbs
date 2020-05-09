@@ -25,36 +25,37 @@
             var authHeader=localStorage.getItem("header");
             console.log(authHeader);
 
-                function redirectUser(){
-                    var checkEmail=localStorage.getItem("userEmail");
-                    if(checkEmail === null){
+            function redirectUser(){
+                var checkEmail=localStorage.getItem("userEmail");
+                if(checkEmail === null){
                     location.href = "/login";
-                    }
                 }
+            }
 
-                function buildTable(data){
-                    var table = document.getElementById('myTable');
+            function buildTable(data){
+                var table = document.getElementById('myTable');
 
-                    for(var i=0;i<data.length;i++){
-                        var row = `<tr>
-                            <td>${data[i].itemName}</td>
-                            <td>${data[i].itemType}</td>
-                            <td>${data[i].itemOrderStatus}</td>
-                            <input type="submit" value="Edit Item" onclick="itemEdit('${data[i]._id}', '${data[i]._creator}', '${data[i].itemName}', '${data[i].itemType}', '${data[i].itemOrderStatus}')"/>
-                            <input type="button" value="Remove Item" onclick="itemRemove('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
-                            <input type="submit" value="Order Item" onclick="itemOrder('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
+                for(var i=0;i<data.length;i++){
+                    var row = `<tr>
+                        <td>${data[i].itemName}</td>
+                        <td>${data[i].itemType}</td>
+                        <td>${data[i].itemOrderStatus}</td>
+                        <input type="submit" value="Edit Item" onclick="itemEdit('${data[i]._id}', '${data[i]._creator}', '${data[i].itemName}', '${data[i].itemType}', '${data[i].itemOrderStatus}')"/>
+                        <input type="button" value="Remove Item" onclick="itemRemove('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
+                        <input type="submit" value="Order Item" onclick="itemOrder('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
                         </tr>`
                         table.innerHTML += row;
-                    }
                 }
+            }
             
             function itemRemove(id, creator, itemOrderStatus){
                 console.log("remove item:",itemOrderStatus);
                 var user;
                 user = {
-                id,
-                _id: creator,
-            }
+                    id,
+                    _id: creator,
+                }
+
                 console.log(id);
                 console.log(creator);
 
@@ -63,12 +64,12 @@
                 }
                 else{
                     $.ajax({
-                type: 'DELETE',
-                data: JSON.stringify(user),
-                contentType: 'application/json',
-                url: `/items/${id}`,
-                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
-                statusCode: {
+                    type: 'DELETE',
+                    data: JSON.stringify(user),
+                    contentType: 'application/json',
+                    url: `/items/${id}`,
+                    beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                    statusCode: {
                     401: function(data){
                         alert("Unauthorized!");
                     },
@@ -85,8 +86,8 @@
                         location.reload();
                         alert("Item removed successfully.");
                     }
-                },
-                });
+                    },
+                    });
                 }
             }
 
@@ -119,12 +120,12 @@
                     }
 
                     $.ajax({
-                type: 'PATCH',
-                data: JSON.stringify(item),
-                contentType: 'application/json',
-                url: `/items/order/${id}`,
-                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
-                statusCode: {
+                    type: 'PATCH',
+                    data: JSON.stringify(item),
+                    contentType: 'application/json',
+                    url: `/items/order/${id}`,
+                    beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                    statusCode: {
                     401: function(data){
                         alert("Unauthorized!");
                     },
@@ -141,8 +142,8 @@
                         location.reload();
                         alert("Item order has been placed successfully.");
                     }
-                },
-                });
+                    },
+                    });
                 }
             }
 
@@ -152,8 +153,10 @@
                 user={
                     _id,
                 }
+
                 redirectUser();
-            $.ajax({
+
+                $.ajax({
                 type: 'GET',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
@@ -173,11 +176,10 @@
                         buildTable(res.items);
                     }
                 },
-            });
-            localStorage.removeItem("itemId");
-            localStorage.removeItem("creatorId");
-        }
-
+                });
+                localStorage.removeItem("itemId");
+                localStorage.removeItem("creatorId");
+            }
             </script>
         </center>
     </body>

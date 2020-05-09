@@ -16,52 +16,52 @@
                 <button type="button" onclick="myFunction()">Submit</button>
             </form>
             <script>
-            var item;
-            var _creator=localStorage.getItem("userId");
-            var authHeader=localStorage.getItem("header");
-            console.log(_creator);
-            console.log(authHeader);
+                var item;
+                var _creator=localStorage.getItem("userId");
+                var authHeader=localStorage.getItem("header");
+                console.log(_creator);
+                console.log(authHeader);
 
-            function redirectUser(){
-            var checkEmail=localStorage.getItem("userEmail");
-            if(checkEmail === null){
-                location.href = "/login";
-            }
-            }
+                function redirectUser(){
+                    var checkEmail=localStorage.getItem("userEmail");
+                    if(checkEmail === null){
+                        location.href = "/login";
+                    }
+                }
 
-            function myFunction() {
-            var itemName = document.getElementById("itemName").value;
-            var itemType= document.getElementById("itemType").value;
+                function myFunction() {
+                    var itemName = document.getElementById("itemName").value;
+                    var itemType= document.getElementById("itemType").value;
         
-              item = {
+                    item = {
                     itemName,
                     itemType,
                     _creator,
-                }
+                    }
                 
 
-            $.ajax({
-                type: 'POST',
-                data: JSON.stringify(item),
-                contentType: 'application/json',
-                url: '/items',
-                beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
-                statusCode: {
-                    401: function(data){
-                        console.log(data);
-                        alert("Unauthorized.");
-                    },
-                    400: function(data) {
-                        console.log(data);
-                        alert("Invalid item name or type.");
-                    },
-                    200: function(res){
-                        location.reload();
-                        alert("Item successfully added to your inventory.");
-                    }
-                },
-    });
-}
+                    $.ajax({
+                        type: 'POST',
+                        data: JSON.stringify(item),
+                        contentType: 'application/json',
+                        url: '/items',
+                        beforeSend: function(xhr){xhr.setRequestHeader('x-auth', authHeader);},
+                        statusCode: {
+                        401: function(data){
+                            console.log(data);
+                            alert("Unauthorized.");
+                        },
+                        400: function(data) {
+                            console.log(data);
+                            alert("Invalid item name or type.");
+                        },
+                        200: function(res){
+                            location.reload();
+                            alert("Item successfully added to your inventory.");
+                        }
+                        },
+                    });
+                }
             </script>
         </center>
     </body>

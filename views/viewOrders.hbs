@@ -24,29 +24,29 @@
 
             <script>
 
-                function redirectUser(){
-            var checkEmail=localStorage.getItem("userEmail");
-            if(checkEmail === null){
-                location.href = "/login";
-            }
+            function redirectUser(){
+                var checkEmail=localStorage.getItem("userEmail");
+                if(checkEmail === null){
+                    location.href = "/login";
+                }
             }
 
-                function buildTable(data){
-                    var table = document.getElementById('myTable');
+            function buildTable(data){
+                var table = document.getElementById('myTable');
 
-                    for(var i=0;i<data.length;i++){
-                        if(data[i].itemOrderStatus){
-                            var row = `<tr>
-                            <td>${data[i].itemName}</td>
-                            <td>${data[i].itemType}</td>
-                            <td>${data[i].itemDeliveryStatus}</td>
-                            <td>${data[i].itemOrderCreatedAt}</td>
-                            <input type="submit" value="Cancel Order" onclick="cancelOrder('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
-                            </tr>`
-                            table.innerHTML += row;
-                        }
+                for(var i=0;i<data.length;i++){
+                    if(data[i].itemOrderStatus){
+                        var row = `<tr>
+                        <td>${data[i].itemName}</td>
+                        <td>${data[i].itemType}</td>
+                        <td>${data[i].itemDeliveryStatus}</td>
+                        <td>${data[i].itemOrderCreatedAt}</td>
+                        <input type="submit" value="Cancel Order" onclick="cancelOrder('${data[i]._id}', '${data[i]._creator}', '${data[i].itemOrderStatus}')"/>
+                        </tr>`
+                        table.innerHTML += row;
                     }
                 }
+            }
 
 
             var items;
@@ -59,13 +59,13 @@
             function cancelOrder(id, creator, itemOrderStatus){
                 itemOrderStatus = false;
                 var item;
-                    item = {
-                        id,
-                        itemOrderStatus,
-                        _id: creator,
-                    }
+                item = {
+                    id,
+                    itemOrderStatus,
+                    _id: creator,
+                }
 
-                    $.ajax({
+                $.ajax({
                 type: 'PATCH',
                 data: JSON.stringify(item),
                 contentType: 'application/json',
@@ -96,7 +96,7 @@
 
                 redirectUser();
 
-            $.ajax({
+                $.ajax({
                 type: 'GET',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
@@ -116,9 +116,8 @@
                         buildTable(res.items);
                     }
                 },
-    });
-}
-
+                });
+            }
             </script>
         </center>
     </body>

@@ -19,6 +19,8 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+
+//routes to render pages
 app.get('/', (req, res) => {
     res.render('signup.hbs');
 });
@@ -47,6 +49,10 @@ app.get('/viewOrders', (req, res) => {
     res.render('viewOrders.hbs');
 });
 
+
+//routes for accessing items model
+
+//item create
 app.post('/items', authenticate, (req, res) => {
     var item = new Item({
         itemName: req.body.itemName,
@@ -60,6 +66,8 @@ app.post('/items', authenticate, (req, res) => {
     });
 });
 
+
+//all items for a particular user
 app.get('/items', authenticate, (req, res) => {
     Item.find({
         _creator: req.user._id,
@@ -70,6 +78,8 @@ app.get('/items', authenticate, (req, res) => {
     });
 });
 
+
+//individual item info
 app.get('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
 
@@ -92,6 +102,7 @@ app.get('/items/:id', authenticate, (req, res) => {
 });
 
 
+//item deletion
 app.delete('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
 
@@ -113,6 +124,8 @@ app.delete('/items/:id', authenticate, (req, res) => {
     });
 });
 
+
+//item edit
 app.patch('/items/:id', authenticate, (req, res) => {
     var id = req.params.id;
     var body = _.pick(req.body, ['itemName', 'itemType']);
@@ -133,6 +146,8 @@ app.patch('/items/:id', authenticate, (req, res) => {
 
 });
 
+
+//place item order
 app.patch('/items/order/:id', authenticate, (req, res) => {
     var id = req.params.id;
     var body = _.pick(req.body, ['itemOrderStatus']);
@@ -164,6 +179,7 @@ app.patch('/items/order/:id', authenticate, (req, res) => {
 });
 
 
+//routes to handle users
 //user sign-up
 app.post('/users', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
@@ -180,11 +196,14 @@ app.post('/users', (req, res) => {
     });
 });
 
+
 //user-info
 app.get('/users/me', authenticate, (req, res) => {
     res.send(req.user);
 });
 
+
+//user login
 app.post('/users/login', (req, res) => {
     var body = _.pick(req.body, ['email', 'password']);
 
@@ -198,7 +217,7 @@ app.post('/users/login', (req, res) => {
 });
 
 
-//logout
+//user logout
 app.delete('/users/me/token', authenticate, (req, res) => {
     // console.log(req.token);
     req.user.removeToken(req.token).then(() => {
@@ -207,6 +226,7 @@ app.delete('/users/me/token', authenticate, (req, res) => {
         res.status(400).send();
     });
 });
+
 
 app.listen(port, () => {
     console.log(`Started on port ${port}`);

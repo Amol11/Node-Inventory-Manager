@@ -22,25 +22,25 @@
             var user;
 
             function redirectUser(){
-                    var checkEmail=localStorage.getItem("userEmail");
-                    if(checkEmail === null){
+                var checkEmail=localStorage.getItem("userEmail");
+                if(checkEmail === null){
                     console.log(checkEmail);
                 }
-                    else{
+                else{
                     location.href = "/dashboard";
                 }
             }
 
             function myFunction() {
-            var email = document.getElementById("email").value;
-            var password = document.getElementById("password").value;
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
 
-            user = {
+                user = {
                     email,
                     password,
                 }
 
-            $.ajax({
+                $.ajax({
                 type: 'POST',
                 data: JSON.stringify(user),
                 contentType: 'application/json',
@@ -62,9 +62,9 @@
                     console.log(header);
                 },
                 
-            });
+                });
 
-        }
+            }
             </script>
         </center>
     </body>
