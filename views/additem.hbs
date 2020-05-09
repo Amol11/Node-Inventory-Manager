@@ -3,9 +3,9 @@
     <head>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <meta charset="utf-8">
-        <title>Sign-Up</title>
+        <title>Add Item</title>
     </head>
-    <body>
+    <body onload="redirectUser()">
         <center>
             <h1>Add Item</h1>
             <p>This item will be added to your inventory.</p>
@@ -21,6 +21,13 @@
             var authHeader=localStorage.getItem("header");
             console.log(_creator);
             console.log(authHeader);
+
+            function redirectUser(){
+            var checkEmail=localStorage.getItem("userEmail");
+            if(checkEmail === null){
+                location.href = "/login";
+            }
+            }
 
             function myFunction() {
             var itemName = document.getElementById("itemName").value;
@@ -49,8 +56,8 @@
                         alert("Invalid item name or type.");
                     },
                     200: function(res){
+                        location.reload();
                         alert("Item successfully added to your inventory.");
-                        location.href = "/dashboard";
                     }
                 },
     });

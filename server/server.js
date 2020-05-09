@@ -43,6 +43,10 @@ app.get('/editItem', (req, res) => {
     res.render('edititem.hbs');
 });
 
+app.get('/viewOrders', (req, res) => {
+    res.render('viewOrders.hbs');
+});
+
 app.post('/items', authenticate, (req, res) => {
     var item = new Item({
         itemName: req.body.itemName,

@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <title>Sign-Up</title>
     </head>
-    <body>
+    <body onload="redirectUser()">
         <center>
             <h1>Welcome to the Inventory Manager</h1>
             <p>Sign Up here</p>
@@ -19,6 +19,16 @@
 
             <script>
             var user;
+
+            function redirectUser(){
+                    var checkEmail=localStorage.getItem("userEmail");
+                    if(checkEmail === null){
+                    console.log(checkEmail);
+                }
+                    else{
+                    location.href = "/dashboard";
+                }
+            }
 
             function myFunction() {
             var email = document.getElementById("email").value;
@@ -50,8 +60,10 @@
                     localStorage.setItem("header", header);
                     console.log(header);
                 },
-    });
-}
+                
+            });
+
+        }
             </script>
         </center>
     </body>

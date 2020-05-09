@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <title>Login</title>
     </head>
-    <body>
+    <body onload="redirectUser()">
         <center>
             <h1>Welcome to the Inventory Manager</h1>
             <p>Login here</p>
@@ -51,6 +51,16 @@
                 },
     });
 }
+        
+        function redirectUser(){
+            var checkEmail=localStorage.getItem("userEmail");
+            if(checkEmail === null){
+                console.log(checkEmail);
+            }
+            else{
+                location.href = "/dashboard";
+            }
+            }
             </script>
         </center>
     </body>
