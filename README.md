@@ -1,5 +1,4 @@
 # Node-Inventory-Manager (screenshots)
-Completed this project in under 9 days
 
 ![image](https://user-images.githubusercontent.com/33172323/96594185-f6b9c280-1307-11eb-8eda-b981dbf41d3f.png)
 
